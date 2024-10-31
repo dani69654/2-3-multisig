@@ -1,0 +1,23 @@
+{
+  "name": "bitcoin_multisig",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec ts-node src/index.ts"
+  },
+  "author": "Daniele Martinelli",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "bip32": "^5.0.0-rc.0",
+    "bip39": "^3.1.0",
+    "bitcoinjs-lib": "^7.0.0-rc.0",
+    "tiny-secp256k1": "^2.2.3"
+  }
+}
