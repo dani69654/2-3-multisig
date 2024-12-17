@@ -7,13 +7,13 @@ const bip32 = BIP32Factory(tinysecp);
 
 async function main() {
     /** Generate Satoshi, Hal, and Adam */
-    const satoshi = generateWallet('satoshi');
-    const hal = generateWallet('hal');
-    const adam = generateWallet('adam');
+    const satoshi = generateWallet();
+    const hal = generateWallet();
+    const adam = generateWallet();
 
     console.log({
-        satoshi: { address:satoshi.address ,mnemonic: satoshi.mnemonic, xpub: satoshi.xpub },
-        hal: { address:hal.address, mnemonic: hal.mnemonic, xpub: hal.xpub },
+        satoshi: { address: satoshi.address, mnemonic: satoshi.mnemonic, xpub: satoshi.xpub },
+        hal: { address: hal.address, mnemonic: hal.mnemonic, xpub: hal.xpub },
         adam: { address: adam.address, mnemonic: adam.mnemonic, xpub: adam.xpub },
     });
 
@@ -57,22 +57,18 @@ async function main() {
     console.log(`- Address: ${p2wsh.address}`);
     console.log(`- Witness Script: ${Buffer.from(p2wsh.redeem.output).toString('hex')}`);
 
-// return;
-
-
-
     // /** Create spending transaction */
-    const DEPOSIT_TO_MUSIG_TX_ID = '42285d8b1a95cc3888103d3ed0b955910c349bf1a40b1ae53e4419afc3bd5deb'
-    const OUTPUT_INDEX = 0; 
+    const DEPOSIT_TO_MUSIG_TX_ID = '42285d8b1a95cc3888103d3ed0b955910c349bf1a40b1ae53e4419afc3bd5deb';
+    const OUTPUT_INDEX = 0;
     const DEPOSIT_TO_MUSIG_AMOUNT = BigInt(100_000_000 * 100); // 10 BTC
     const utxo = {
         txid: DEPOSIT_TO_MUSIG_TX_ID,
         vout: OUTPUT_INDEX,
         value: DEPOSIT_TO_MUSIG_AMOUNT,
     };
-    
+
     // Generate destination address
-    const destinationAddress = {address:'mi3EaoRwuCQLeyaGKejXQFMxsY1FUNAS26'} // generateWallet();
+    const destinationAddress = generateWallet();
     console.log('\nDestination Address:', destinationAddress.address);
 
     if (!destinationAddress.address) {
@@ -89,7 +85,6 @@ async function main() {
         },
         witnessScript: p2wsh.redeem.output, // Only add witnessScript for P2WSH
     });
-    
 
     const fee = BigInt(100_000); // tx fee in satoshis
     psbt.addOutput({
@@ -106,15 +101,12 @@ async function main() {
     psbt.signInput(0, halChildNode);
     // psbt.signInput(0, adamChildNode);
 
-    
     // Finalize the transaction
     psbt.finalizeInput(0);
 
     // Extract the raw transaction in hex format
     const txHex = psbt.extractTransaction().toHex();
     console.log('\nSigned Transaction Hex:\n', txHex);
-    
 }
 
- main();
-
+main();
